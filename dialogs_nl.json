@@ -1,0 +1,100 @@
+{
+  "level1": {
+    "dialog_1": {
+      "nl": "Deze jungle is erg dicht, \n ik kan niet door\n de struiken lopen. \n Laten we proberen de rivier\n te volgen om hieruit te komen."
+    }
+  },
+  "level2": {
+    "dialog_1": {
+      "nl": "HELP! \n Ik zit vast in mijn parachute! \n Kun je me losmaken?"
+    },
+    "dialog_2": {
+      "nl": "Je hebt een scherp \n METALEN ONDERDEEL\n gevonden! \n Het zou nuttig kunnen zijn."
+    },
+    "dialog_3": {
+      "nl": "Je hebt de touwen\n  doorgesneden en me gered! \n We zouden samen de \n berg moeten beklimmen \n voor een beter uitzicht."
+    }
+  },
+  "level3": {
+    "dialog_1": {
+      "nl": "Waar zijn we? \n Dit lijkt op een kamp!\n Laten we het gebied doorzoeken \n voor iets nuttigs!"
+    },
+    "dialog_2": {
+      "nl": "Laten we wat fakkels maken\n en de grot binnen gaan!"
+    },
+    "dialog_3": {
+      "nl": "Er hangen wat appels aan de boom,\n maar ik weet niet zeker \n of we ze moeten eten...\n Er liggen ook \n wat takken op de grond."
+    },
+    "dialog_4": {
+      "nl": "Het is hier te donker,\n we hebben licht nodig \n om de grot binnen te gaan."
+    },
+    "dialog_5": {
+      "nl": "Kijk, ik heb \n een aansteker in de tent gevonden!\n Dat zou van pas kunnen komen."
+    },
+    "dialog_6": {
+      "nl": "Laten we de aansteker gebruiken \n om het vuur aan te steken."
+    },
+    "dialog_7": {
+      "nl": "Kijk,\n ik heb het vuur weer aangestoken!"
+    },
+    "dialog_8": {
+      "nl": "Ik heb een stok nodig om de fakkel te pakken."
+    },
+    "dialog_9": {
+      "nl": "Ik heb een fakkel uit het vuur gepakt."
+    },
+    "dialog_10": {
+      "nl": "De tent zit\n vol met oude spullen,\n geen idee of ik iets \ndaarvan kan gebruiken..."
+    },
+    "dialog_11": {
+      "nl": "Een oude vuurplaats...\niemand was\nhier onlangs."
+    }
+  },
+  "level4": {
+    "dialog_1": {
+      "nl": "\n \n Hé jij, \n help me alsjeblieft!\nIk zit hier vast!\nIk had nooit die vervloekte\n schat moeten aanraken!\nNeem alsjeblieft deze\nMEDAILLE\n en breng het terug \n waar het hoort!"
+    },
+    "dialog_2": {
+      "nl": "Er gaat iets open..."
+    },
+    "dialog_3": {
+    "nl": "Te langzaam! Probeer het opnieuw!"
+    }
+  },
+  "level5": {
+    "dialog_1": {
+      "nl": "Kijk, \n ik heb een \n{color} magische steen gevonden\n!"
+    },
+    "dialog_2": {
+      "nl":  "\nKijk, \n er staan combinaties \nvan runen op de\ngrafstenen geschreven!"
+    },
+    "dialog_3": {
+    "nl": "Misschien kunnen\n  we de volgorde resetten\n  als we hier allebei staan?"
+    },
+    "dialog_4": {
+      "nl": "Kijk,\n de combinatie heeft \n een geheime doorgang geopend!"
+    }
+  },
+
+
+  
+  "level6": {
+    "dialog_1": {
+      "nl": "Ben je hier om mijn schatten te stelen? \n Daar zul je spijt van krijgen!"
+    },
+    "dialog_2": {
+      "nl": "Je hebt mijn \n MEDAILLE teruggebracht. \n Je zult worden beloond \n voor je onbaatzuchtige moed, \n maar alleen als je het \n teleportatieritueel beheerst."
+    },
+    "dialog_3": {
+      "nl": "We zijn begonnen met het \n teleportatieritueel \n door de cirkel te vormen! \n Laten we ons nu opladen \n met magische energie!"
+    },
+    "dialog_4": {
+      "nl": "We zijn volledig opgeladen! \n Maak je klaar voor teleportatie!"
+    }
+  },
+  "level7": {
+    "dialog_1": {
+      "nl": "\n \n Je hebt me uit mijn gevangenis gered! \n Dank je wel! \n Laten we teruggaan naar de stad. \n Ik ken de weg in de jungle, \n volg mij."
+    }
+  }
+}
