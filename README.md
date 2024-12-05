@@ -1,4 +1,5 @@
-"How Machines See and Learn"
+"How Machines See and Learn".
+
 This project is a collection of educational materials developed for a workshop hosted at Kinderuniversiteit in Brugge on October 26, 2024.
 
 The goal of this workshop was to introduce children aged 8–11 to the fascinating world of computer vision and machine learning through engaging, hands-on activities. Now, these materials are available for anyone to use, adapt, improve, add levels, share and enjoy!
