@@ -2,9 +2,9 @@
 
 This project is a collection of educational materials developed for a workshop hosted at Kinderuniversiteit in Brugge on October 26, 2024.
 
-The goal of this workshop was to introduce children aged 8–11 to the fascinating world of computer vision and machine learning through engaging, hands-on activities. Now, these materials are available for anyone to use, adapt, improve, add levels, share and enjoy!
+The goal of this workshop was to introduce children aged 8–11 to the fascinating world of computer vision and machine learning through engaging, hands-on activities. 
 In the python based game, the players are navigated only based on live video feed input.
-
+Now, these materials are available for anyone to use, adapt, improve, add levels, share and enjoy!
 🧰 Repository Contents:
 
 1. Theory (1_Theory)
