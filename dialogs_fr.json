@@ -1,0 +1,97 @@
+{
+  "level1": {
+    "dialog_1": {
+      "fr": "Cette jungle est très épaisse, \n je ne peux pas traverser les buissons. \n Essayons de suivre la rivière pour sortir d'ici."
+    }
+  },
+  "level2": {
+    "dialog_1": {
+      "fr": "À L'AIDE! \n Je suis coincé dans mon parachute! \n Peux-tu me libérer?"
+    },
+    "dialog_2": {
+      "fr": "Tu as trouvé une pièce métallique tranchante! \n Cela pourrait être utile."
+    },
+    "dialog_3": {
+      "fr": "Tu as coupé les cordes et tu m'as sauvé! \n Nous devrions escalader la \n montagne ENSEMBLE pour \n avoir une meilleure vue."
+    }
+  },
+  "level3": {
+    "dialog_1": {
+      "fr": "Où sommes-nous? \n Cela ressemble à un camp!\n Explorons la zone \n pour trouver quelque chose d'utile!"
+    },
+    "dialog_2": {
+      "fr": "Construisons des torches\n et entrons dans la grotte!"
+    },
+    "dialog_3": {
+      "fr": "Il y a des pommes \n dans l'arbre,\n mais je ne suis pas sûr \n que nous devrions les manger...\n Il y a aussi\n des branches \n sur le sol."
+    },
+    "dialog_4": {
+      "fr": "Il fait trop sombre ici\n Nous avons besoin de lumière \n pour entrer dans la grotte."
+    },
+    "dialog_5": {
+      "fr": "Regarde, j'ai trouvé \n un briquet dans la tente!\n Cela pourrait être utile."
+    },
+    "dialog_6": {
+      "fr": "Utilisons le briquet \n pour allumer le feu."
+    },
+    "dialog_7": {
+      "fr": "Regarde,\n j'ai rallumé le feu!"
+    },
+    "dialog_8": {
+      "fr": "J'ai besoin d'un bâton pour prendre la torche."
+    },
+    "dialog_9": {
+      "fr": "J'ai pris une torche du feu."
+    },
+    "dialog_10": {
+    "fr": "La tente est pleine de vieilleries, aucune idée si je peux en utiliser quelque chose..."
+      },
+    "dialog_11": {
+      "fr": "Un vieux foyer...\nquelqu'un était\nici récemment."
+    }
+  },
+  "level4": {
+    "dialog_1": {
+      "fr": "Hé toi, aide-moi s'il te plaît!\nJe suis piégé ici!\nJe n'aurais jamais dû toucher le trésor maudit!\nPrends ce\nMÉDAILLON\net rapporte-le à\nl'endroit où il doit être!"
+    },
+    "dialog_2": {
+      "fr": "Quelque chose s'ouvre..."
+    },
+  "dialog_3": {
+  "fr": "Trop lent ! Essaie encore !"
+  }
+  },
+  "level5": {
+    "dialog_1": {
+      "fr": "Regarde, \n j'ai trouvé une \n{color} pierre magique\n!"
+    },
+    "dialog_2": {
+    "fr": "Regarde, \n il y a des combinaisons \nde runes sur les\n pierres tombales !"
+    },
+    "dialog_3": {
+    "fr": "Peut-être qu'on\n peut réinitialiser la\n séquence si on se tient \ntous les deux ici ?"
+    },
+    "dialog_4": {
+    "fr": "Regarde,\n la combinaison a ouvert \n un passage secret !"
+    }
+  },
+  "level6": {
+    "dialog_1": {
+      "fr": "Es-tu ici pour voler mes trésors? \n Tu vas le regretter!"
+    },
+    "dialog_2": {
+      "fr": "Tu as rapporté \n mon MÉDAILLON. \n Tu seras récompensé \n pour ton courage désintéressé, \n mais seulement si tu \n maîtrises le RITUEL de téléportation"
+    },
+    "dialog_3": {
+      "fr": "Nous avons commencé le \n RITUEL de téléportation \n en formant le cercle! \n Chargons-nous maintenant \n d'énergie magique!"
+    },
+    "dialog_4": {
+      "fr": "Nous sommes complètement chargés! \n Prépare-toi à la téléportation!"
+    }
+  },
+  "level7": {
+    "dialog_1": {
+      "fr": "\n \n Tu m'as sauvé de ma prison! \n Merci beaucoup! \n Retournons en ville. \n Je connais bien la jungle, \n suis-moi"
+    }
+  }
+}
