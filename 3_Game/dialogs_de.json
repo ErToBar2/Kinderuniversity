@@ -77,6 +77,9 @@
     },
     "dialog_4": {
     "de": "Schau,\n die Kombination hat \n einen geheimen Durchgang geöffnet!"
+    },
+    "dialog_5": {
+    "de": "Zauberer:\nUm meinen Tempel\nzu betreten,\nmuessst ihr\ndas Raetsel loesen!\nKoennt ihr euch\ndie 3 Kombinationen merken?"
     }
 
   },

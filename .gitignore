@@ -1,0 +1,10 @@
+__pycache__/
+*.py[cod]
+*.ipynb_checkpoints/
+
+2_Practical Exercise/*.pt
+3_Game/yolo-Weights/*.pt
+
+3_Game/privacy_mask_template.png
+3_Game/Leaderboard/leaderboard.json
+3_Game/Leaderboard/ritual_success_*.png

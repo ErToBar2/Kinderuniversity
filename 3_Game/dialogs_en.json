@@ -73,6 +73,9 @@
     },    
     "dialog_4": {
     "en": "Look,\n the combination opened \n a secret passage!"
+    },
+    "dialog_5": {
+    "en": "Wizard:\nTo enter my temple,\nyou have to solve\nthe puzzle!\nCan you remember\nthe 3 combinations?"
     }
   },
   "level6": {

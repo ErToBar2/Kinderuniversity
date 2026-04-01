@@ -1,12 +1,23 @@
+from pathlib import Path
+import sys
+
 import cv2
 import numpy as np
 import pygame
 from ultralytics import YOLO
 
+
+MODULE_DIR = Path(__file__).resolve().parent
+REPO_ROOT = MODULE_DIR.parent
+if str(REPO_ROOT) not in sys.path:
+    sys.path.insert(0, str(REPO_ROOT))
+
+from workshop_setup import resolve_model_path
+
 class PoseEstimationRitual:
     def __init__(self):
         # Load the YOLO model with the specified weights for pose estimation
-        self.model = YOLO("yolo-Weights\yolo11x-pose.pt")
+        self.model = YOLO(resolve_model_path(MODULE_DIR / "yolo-Weights", "yolo11x-pose.pt"))
         self.frame_counter = 0
         self.keypoint_names = [
             'Nose', 'Left Eye', 'Right Eye', 'Left Ear', 'Right Ear',

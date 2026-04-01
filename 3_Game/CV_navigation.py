@@ -1,4 +1,7 @@
 # CV_navigation.py
+from pathlib import Path
+import sys
+
 import cv2
 import numpy as np
 import time
@@ -6,10 +9,18 @@ import torch
 from ultralytics import YOLO
 
 
+MODULE_DIR = Path(__file__).resolve().parent
+REPO_ROOT = MODULE_DIR.parent
+if str(REPO_ROOT) not in sys.path:
+    sys.path.insert(0, str(REPO_ROOT))
+
+from workshop_setup import resolve_model_path
+
+
 class CVNavigation:
-    def __init__(self, control_inputs, width_size_video, height_size_video, debug=True):
+    def __init__(self, control_inputs, width_size_video, height_size_video, debug=False):
         # ---------------- Model / device setup ----------------
-        self.model = YOLO(r'yolo-Weights\yolov8x-worldv2.pt')
+        self.model = YOLO(resolve_model_path(MODULE_DIR / "yolo-Weights", "yolov8x-worldv2.pt"))
 
         self.device = 'cuda' if torch.cuda.is_available() else 'cpu'
         try:
@@ -240,33 +251,96 @@ class CVNavigation:
         cv2.putText(img, text, (tx, ty), cv2.FONT_HERSHEY_SIMPLEX, font_scale, color, thickness, cv2.LINE_AA)
 
     def classify_rune_color(self, roi):
-        """Return 'red'/'green'/'blue' based on dominant channel in inner 50%."""
+        """
+        Return (color, score) for a rune side, or (None, 0.0) if the frisbee
+        does not show a confident colored rune.
+        """
         if roi.size == 0:
-            return None
+            return None, 0.0
+
         center = self._center_crop(roi, 0.5)
-        avg_bgr = np.mean(center, axis=(0, 1))
-        b, g, r = avg_bgr
-        g *= 1.3  # small bias per your original code
-        mx = max(r, g, b)
-        if mx == r:
-            return 'red'
-        elif mx == g:
-            return 'green'
-        else:
-            return 'blue'
+        if center.size == 0:
+            return None, 0.0
+
+        hsv = cv2.cvtColor(center, cv2.COLOR_BGR2HSV)
+        h = hsv[:, :, 0]
+        s = hsv[:, :, 1].astype(np.float32)
+        v = hsv[:, :, 2].astype(np.float32)
+        gray = cv2.cvtColor(center, cv2.COLOR_BGR2GRAY)
+
+        colored_mask = (s >= 70) & (v >= 60)
+        colored_fraction = float(np.mean(colored_mask))
+        if colored_fraction < 0.10:
+            return None, 0.0
+
+        weights = ((s / 255.0) * (v / 255.0))[colored_mask]
+        hue = h[colored_mask]
+        if hue.size < 50:
+            return None, 0.0
+
+        gray_std = float(gray.std())
+        laplacian_var = float(cv2.Laplacian(gray, cv2.CV_32F).var())
+        hue_std = float(hue.astype(np.float32).std())
+        value_std = float(v[colored_mask].std())
+
+        scores = {
+            'red': float(weights[(hue <= 12) | (hue >= 170)].sum()),
+            'green': float(weights[(hue >= 34) & (hue <= 98)].sum()),
+            'blue': float(weights[(hue >= 96) & (hue <= 140)].sum()),
+        }
+
+        total_score = sum(scores.values())
+        if total_score <= 0:
+            return None, 0.0
+
+        dominant_color, dominant_score = max(scores.items(), key=lambda item: item[1])
+        score_ratios = {color: score / total_score for color, score in scores.items()}
+        sorted_ratios = sorted(score_ratios.values(), reverse=True)
+        dominant_ratio = score_ratios[dominant_color]
+        second_ratio = sorted_ratios[1] if len(sorted_ratios) > 1 else 0.0
+
+        min_ratio = 0.46
+        min_margin = 0.14
+        min_gray_std = 8.0
+        min_laplacian_var = 16.0
+        if dominant_color == 'green':
+            min_ratio = 0.50
+            min_margin = 0.10
+            min_gray_std = 8.0
+            min_laplacian_var = 16.0
+            if hue_std < 3.5 and value_std < 12.0:
+                return None, 0.0
+
+        if dominant_ratio < min_ratio or (dominant_ratio - second_ratio) < min_margin:
+            return None, 0.0
+
+        if gray_std < min_gray_std and laplacian_var < min_laplacian_var:
+            return None, 0.0
+
+        return dominant_color, dominant_score
 
     # --------------- Main per-frame ---------------
-    def process_frame(self, frame, player1_pos=None, player2_pos=None):
+            # --------------- Main per-frame ---------------
+    def process_frame(self, frame, display_frame=None, player1_pos=None, player2_pos=None):
         t_now = time.time()
         dt = max(1e-3, t_now - self._prev_time)  # seconds
         self._prev_time = t_now
+
+        # Optionally override stored player positions
         if player1_pos is not None and player2_pos is not None:
             self.players_positions['player1'] = list(player1_pos)
             self.players_positions['player2'] = list(player2_pos)
 
+        # Separate frames:
+        # - frame_cv: what the CV model sees (can be masked)
+        # - out_frame: what we actually draw on and return (full webcam image)
+        frame_cv = frame
+        if display_frame is None:
+            out_frame = frame_cv.copy()
+        else:
+            out_frame = display_frame.copy()
 
-
-        height, width = frame.shape[:2]
+        height, width = frame_cv.shape[:2]
         imgsz = [self.width_size_video, self.height_size_video]
 
         # Reset per-frame flags
@@ -286,13 +360,13 @@ class CVNavigation:
         detection_counts_black = {'left': 0, 'right': 0, 'up': 0, 'down': 0}
         detection_counts_white = {'left': 0, 'right': 0, 'up': 0, 'down': 0}
 
-        # Run detection
+        # Run detection on the (possibly masked) CV frame
         results = self.model.predict(
-            source=frame,
+            source=frame_cv,
             imgsz=imgsz,
             stream=False,
             verbose=False,
-            conf=0.10  # global low conf, we apply per-class thresholds
+            conf=0.10  # global low conf, per-class thresholds below
         )
 
         # Collect boxes first so we can pick top-2 hats
@@ -340,14 +414,14 @@ class CVNavigation:
                         'conf': confidence, 'class_idx': class_idx, 'class_name': class_name
                     })
 
-        # ---- Handle hats: choose top-2 by confidence and decide white/black robustly ----
+        # ---- Handle hats: choose top-2 by confidence and decide white/black using brightness ----
         hat_boxes.sort(key=lambda d: d['conf'], reverse=True)
         hat_boxes = hat_boxes[:2]  # only two most confident
 
-        # Compute brightness for each hat using inner 50% region
+        # Compute brightness for each hat using inner 50% region on the CV frame
         hat_infos = []
         for hb in hat_boxes:
-            roi = frame[hb['y1']:hb['y2'], hb['x1']:hb['x2']]
+            roi = frame_cv[hb['y1']:hb['y2'], hb['x1']:hb['x2']]
             bright = self._hat_brightness(roi)
             hat_infos.append({**hb, 'brightness': bright})
 
@@ -374,7 +448,7 @@ class CVNavigation:
             if self.debug and h['brightness'] is not None:
                 print(f"[CVN] One hat: brightness {h['brightness']:.1f} -> {color}")
 
-        # Draw regions labels (visual nav grid)
+        # ---- Draw navigation regions on OUT frame (what we show) ----
         regions = [
             {'name': 'Left', 'rect': ((0, 0), (left_column_width, height)), 'color': (255, 0, 0)},
             {'name': 'Right', 'rect': ((right_column_start, 0), (width, height)), 'color': (0, 255, 0)},
@@ -384,7 +458,7 @@ class CVNavigation:
         for region in regions:
             (rx1, ry1), (rx2, ry2) = region['rect']
             color = region['color']
-            cv2.rectangle(frame, (rx1, ry1), (rx2, ry2), color, 2)
+            cv2.rectangle(out_frame, (rx1, ry1), (rx2, ry2), color, 2)
             if region['name'] == 'Up':
                 tx, ty = (rx2 - rx1) // 2, ry1 + 30
             elif region['name'] == 'Down':
@@ -393,7 +467,7 @@ class CVNavigation:
                 tx, ty = rx1 + 10, (ry2 + ry1) // 2
             else:
                 tx, ty = rx2 - 70, (ry2 + ry1) // 2
-            cv2.putText(frame, region['name'], (tx, ty), cv2.FONT_HERSHEY_SIMPLEX, 0.7, color, 2, cv2.LINE_AA)
+            cv2.putText(out_frame, region['name'], (tx, ty), cv2.FONT_HERSHEY_SIMPLEX, 0.7, color, 2, cv2.LINE_AA)
 
         # ---- Draw hats + update direction counts ----
         for hat in hat_assignments:
@@ -403,11 +477,11 @@ class CVNavigation:
             color = self.colors.get(hat_color, (0, 255, 255))
             label = f"Player 1 {conf:.2f}" if hat_color == 'black hat' else f"Player 2 {conf:.2f}"
 
-            # Draw box
-            cv2.rectangle(frame, (x1, y1), (x2, y2), color, 2)
-            # Label with background (above top-left)
+            # Draw box on OUT frame
+            cv2.rectangle(out_frame, (x1, y1), (x2, y2), color, 2)
+            # Label with background
             self._draw_label_with_bg(
-                frame,
+                out_frame,
                 label,
                 org=(x1, y1 - 5),
                 font_scale=self.font_scale_label,
@@ -442,22 +516,45 @@ class CVNavigation:
                     detection_counts_white['down'] += 1
 
         # ---- Process non-hat objects (items, runes, etc.) ----
-        # Track which activation classes were actually detected this frame (at-location)
         present_at_location_this_frame = {k: False for k in self.hold_requirements.keys()}
 
-        # First, draw and (maybe) update timers for detections we saw
+        best_rune_candidates = {}
+
         for ob in other_boxes:
             class_name = ob['class_name']
             x1, y1, x2, y2, confidence = ob['x1'], ob['y1'], ob['x2'], ob['y2'], ob['conf']
+
+            if class_name == 'frisbee':
+                roi = frame_cv[y1:y2, x1:x2]
+                rune_color, rune_score = self.classify_rune_color(roi)
+                if rune_color is None:
+                    if self.debug:
+                        print(f"[CVN] Suppress frisbee at ({x1},{y1},{x2},{y2}): no confident rune side")
+                    continue
+
+                candidate = {
+                    'x1': x1,
+                    'y1': y1,
+                    'x2': x2,
+                    'y2': y2,
+                    'conf': confidence,
+                    'rune_color': rune_color,
+                    'rune_score': rune_score,
+                    'rank': confidence * rune_score,
+                }
+                current_candidate = best_rune_candidates.get(rune_color)
+                if current_candidate is None or candidate['rank'] > current_candidate['rank']:
+                    best_rune_candidates[rune_color] = candidate
+                continue
+
             display_label = self.label_mapping.get(class_name, class_name)
             color = self.colors.get(class_name, (0, 255, 255))
             label = f"{display_label} {confidence:.2f}"
 
-            # Draw box
-            cv2.rectangle(frame, (x1, y1), (x2, y2), color, 2)
-            # Draw label (above tl)
+            # Draw box & label on OUT frame
+            cv2.rectangle(out_frame, (x1, y1), (x2, y2), color, 2)
             self._draw_label_with_bg(
-                frame,
+                out_frame,
                 label,
                 org=(x1, y1 - 5),
                 font_scale=self.font_scale_label,
@@ -468,92 +565,108 @@ class CVNavigation:
             if self.debug:
                 print(f"[CVN] Draw item label '{label}' at ({x1},{y1})")
 
-            # If class has a hold timer, ONLY run timer if at required location
+            # Timers use tile positions, not pixels
             if class_name in self.hold_requirements:
                 at_loc = self._is_at_required_location(class_name)
                 if at_loc:
-                    # present & at required tile -> accumulate
                     accum, req, _ = self._class_timer_update(class_name, dt, present_now=True)
                     present_at_location_this_frame[class_name] = True
                     timer_text = f"{accum:.1f}/{int(req)}s"
-                    # Draw timer BELOW the box (red)
                     self._draw_centered_text_below(
-                        frame, timer_text, (x1, y1, x2, y2),
-                        font_scale=self.font_scale_timer, thickness=self.font_thickness, color=(0, 0, 255), margin=8
+                        out_frame, timer_text, (x1, y1, x2, y2),
+                        font_scale=self.font_scale_timer, thickness=self.font_thickness,
+                        color=(0, 0, 255), margin=8
                     )
                     if self.debug:
                         print(f"[CVN] Timer '{class_name}' (RUN) {timer_text} under box ({x1},{y1},{x2},{y2})")
                 else:
-                    # Not at location -> hard reset and (optionally) show '0/i s' if you want
-                    if self.hold_accum[class_name] != 0.0:
-                        if self.debug:
-                            print(f"[CVN] Timer '{class_name}' -> hard reset (not at required tile)")
+                    if self.hold_accum[class_name] != 0.0 and self.debug:
+                        print(f"[CVN] Timer '{class_name}' -> hard reset (not at required tile)")
                     self.hold_accum[class_name] = 0.0
-                    # (no timer text drawn if not at location)
 
-            # Special handling
-            if class_name == 'frisbee':
-                # Rune color classification for your level 5 mechanic
-                roi = frame[y1:y2, x1:x2]
-                if roi.size > 0:
-                    rune_color = self.classify_rune_color(roi)
-                    center_x = (x1 + x2) / 2 / width
-                    center_y = (y1 + y2) / 2 / height
-                    self.detected_objects.append({
-                        'label': f'rune_{rune_color}',
-                        'relative_position': (center_x, center_y),
-                        'confidence': confidence
-                    })
+        rune_draw_colors = {
+            'red': (0, 0, 255),
+            'green': (0, 200, 0),
+            'blue': (255, 0, 0),
+        }
+        for best_rune_candidate in sorted(best_rune_candidates.values(), key=lambda candidate: candidate['x1']):
+            x1 = best_rune_candidate['x1']
+            y1 = best_rune_candidate['y1']
+            x2 = best_rune_candidate['x2']
+            y2 = best_rune_candidate['y2']
+            confidence = best_rune_candidate['conf']
+            rune_color = best_rune_candidate['rune_color']
 
-        # Now, for classes that are at the correct tile but were NOT seen this frame:
+            draw_color = rune_draw_colors.get(rune_color, (0, 255, 255))
+            label = f"Rune {rune_color} {confidence:.2f}"
+
+            cv2.rectangle(out_frame, (x1, y1), (x2, y2), draw_color, 2)
+            self._draw_label_with_bg(
+                out_frame,
+                label,
+                org=(x1, y1 - 5),
+                font_scale=self.font_scale_label,
+                thickness=self.font_thickness,
+                text_color=draw_color,
+                bg_color=(0, 0, 0)
+            )
+            if self.debug:
+                print(f"[CVN] Accepted rune '{rune_color}' at ({x1},{y1},{x2},{y2})")
+
+            center_x = (x1 + x2) / 2 / width
+            center_y = (y1 + y2) / 2 / height
+            self.detected_objects.append({
+                'label': f'rune_{rune_color}',
+                'relative_position': (center_x, center_y),
+                'confidence': confidence,
+                'score': best_rune_candidate['rune_score'],
+                'rank': best_rune_candidate['rank'],
+                'bbox': (x1, y1, x2, y2),
+            })
+
+        # Decay / reset timers for classes not present this frame
         for cname in self.hold_requirements.keys():
             at_loc = self._is_at_required_location(cname)
             if at_loc and not present_at_location_this_frame[cname]:
-                # Object flickered (at location; not detected this frame) -> decay
                 accum, req, _ = self._class_timer_update(cname, dt, present_now=False)
                 if self.debug and accum > 0.0:
                     print(f"[CVN] Timer '{cname}' (DECAY at location) -> {accum:.2f}/{int(req)}s")
             elif not at_loc:
-                # Leaving the location already handled (hard reset) in loop above if seen; also do here for not-seen frames
                 if self.hold_accum[cname] != 0.0:
                     if self.debug:
                         print(f"[CVN] Timer '{cname}' -> hard reset (not at required tile, no detection)")
                     self.hold_accum[cname] = 0.0
 
         # ---- Trigger game actions when timers are full AND positions match ----
-        # 'yellow scissors' -> cut_loose at player2 on [9,5]
         if self.hold_accum.get('yellow scissors', 0.0) >= self.hold_requirements['yellow scissors']:
             if self.players_positions['player2'] == [9, 5]:
                 self.control_inputs['t'] = True
                 self.cut_loose = True
-                self.hold_accum['yellow scissors'] = 0.0  # reset after firing
+                self.hold_accum['yellow scissors'] = 0.0
                 if self.debug:
                     print("[CVN] >>> CUT LOOSE TRIGGERED")
 
-        # 'blue lighter' -> use_lighter at [4,7] (either player)
         if self.hold_accum.get('blue lighter', 0.0) >= self.hold_requirements['blue lighter']:
             if (self.players_positions['player1'] == [4, 7]) or (self.players_positions['player2'] == [4, 7]):
                 self.control_inputs['t'] = True
                 self.use_lighter = True
-                self.hold_accum['blue lighter'] = 0.0  # reset after firing
+                self.hold_accum['blue lighter'] = 0.0
                 if self.debug:
                     print("[CVN] >>> USE LIGHTER TRIGGERED")
 
-        # 'wooden spoon with shovel' -> use_stick at [4,7] (either player)
         if self.hold_accum.get('wooden spoon with shovel', 0.0) >= self.hold_requirements['wooden spoon with shovel']:
             if (self.players_positions['player1'] == [4, 7]) or (self.players_positions['player2'] == [4, 7]):
                 self.control_inputs['z'] = True
                 self.use_stick = True
-                self.hold_accum['wooden spoon with shovel'] = 0.0  # reset after firing
+                self.hold_accum['wooden spoon with shovel'] = 0.0
                 if self.debug:
                     print("[CVN] >>> USE STICK TRIGGERED")
 
-        # 'necklace' -> medallion back at [9,7] (either player)
         if self.hold_accum.get('necklace', 0.0) >= self.hold_requirements['necklace']:
             if (self.players_positions['player1'] == [9, 7]) or (self.players_positions['player2'] == [9, 7]):
                 self.control_inputs['t'] = True
                 self.medallion_back = True
-                self.hold_accum['necklace'] = 0.0  # reset after firing
+                self.hold_accum['necklace'] = 0.0
                 if self.debug:
                     print("[CVN] >>> MEDALLION BACK TRIGGERED")
 
@@ -575,4 +688,5 @@ class CVNavigation:
                     self.control_inputs[key_mapping[direction]] = True
 
         self.frame_count += 1
-        return frame
+        return out_frame
+

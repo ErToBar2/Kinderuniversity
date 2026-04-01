@@ -73,6 +73,9 @@
     },
     "dialog_4": {
     "fr": "Regarde,\n la combinaison a ouvert \n un passage secret !"
+    },
+    "dialog_5": {
+    "fr": "Magicien :\nPour entrer dans\nmon temple, vous\ndevez resoudre\nl'enigme !\nPouvez-vous retenir\nles 3 combinaisons ?"
     }
   },
   "level6": {

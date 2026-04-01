@@ -1,349 +1,199 @@
-# 🎮 Kinderuniversity: Learn Computer Vision Through Play
+# Kinderuniversity
+## How Do Machines See and Learn?
 
-[![Made for Education](https://img.shields.io/badge/Educational%20Purpose-✓-brightgreen)](https://github.com)
-[![Python 3.8+](https://img.shields.io/badge/Python-3.8%2B-blue)](https://www.python.org/)
-[![OpenCV](https://img.shields.io/badge/OpenCV-Latest-brightgreen)](https://opencv.org/)
-[![YOLO](https://img.shields.io/badge/YOLO-v8%2Cv11-informational)](https://github.com/ultralytics/ultralytics)
+Built through repeated Kinderuniversiteit workshops in Belgium, this repository turns computer vision into something learners can see, test, discuss, and extend for themselves. The material was shaped in real sessions rather than only on paper: teachers get a clear structure, students get live feedback, and the workshop stays faithful to both scientific accuracy and hands-on curiosity.
 
-## 🚀 Introduction
+For teachers, this is an easy starting point for introducing computer vision with slides, live webcam experiments, a game, and a closing quiz. For students, it is also a project base: they can add new detection targets, new levels, new maps, new dialogue, or even new training ideas of their own.
 
-**Kinderuniversity** is an interactive educational platform designed to introduce Computer Vision (CV) concepts in a fun, engaging, and hands-on way. Whether you're a teacher looking for an easy entry point to explain CV to students, or an educator wanting to challenge learners through a game-based approach, this project provides everything you need.
+<p align="center">
+  <img src="docs/media/kinderuniversiteit-workshop.png" alt="Children using the Kinderuniversiteit pose-estimation game during a workshop" width="100%">
+</p>
 
-Transform your classroom into a CV exploration lab where students don't just *learn about* computer vision—they *experience* it through:
-- **Conceptual presentations** explaining CV fundamentals
-- **Interactive visualizations** of real-time image processing pipelines
-- **A treasure hunt game** powered by object detection and pose estimation
+<p align="center">
+  <a href="docs/media/final-level-pose-estimation.mp4">Watch the final pose-estimation level</a>
+  |
+  <a href="1_Presentation/Kinderuniversiteit%20Presentation%20-%20EN.pptx">Open the English presentation</a>
+  |
+  <a href="2_Practical%20Exercise/251024_Final_VisualizingComputerVisionPipeline.ipynb">Open the practical notebook</a>
+  |
+  <a href="3_Game/251025_CVgame_treasure-hunt.ipynb">Open the game notebook</a>
+</p>
 
----
+## Why This Works Well In Class
 
-## 📚 Three-Part Learning Journey
+- It follows a real teaching arc: first explain, then visualize, then let students apply the ideas in a game.
+- It treats AI as something to inspect and question, not a black box to admire from a distance.
+- It gives live feedback through the webcam, which makes the workshop social and memorable.
+- It has already been refined in front of real Kinderuniversiteit groups in Belgium.
+- It leaves room for genuine follow-up work instead of ending with a fixed demo.
 
-### 1️⃣ **Presentation** — *Understand the Concepts*
-Start with fundamentals. Clear explanations of:
-- What is Computer Vision?
-- How do machines "see"?
-- Introduction to neural networks and deep learning
-- Real-world applications
+## From Human Sight To CNNs
 
-👉 **Location:** `1_Presentation/`
+<p align="center">
+  <img src="docs/media/vision-workflow-collage.png" alt="Visual workflow collage showing the path from human sight to machine sight, feature extraction, filters, and CNN learning" width="100%">
+</p>
 
----
+The workshop first builds intuition about perception, then shows how images become pixels and features, and only then introduces convolutional neural networks. That same path returns later in the practical notebook and in the game.
 
-### 2️⃣ **Practical Exercise** — *Visualize the Pipeline*
-Get hands-on with actual CV algorithms. Run Jupyter notebooks that visualize:
-- **Image Processing Filters** (Edge detection, color spaces, transformations)
-- **Real-time Computer Vision Pipeline** using your webcam
-- **Deep Learning Detection** with YOLO11 and YOLO8
-- **Interactive sliders** to adjust algorithm parameters and see instant results
+## How We Usually Give This Workshop
 
-**Perfect for:**
-- Understanding how different CV filters work
-- Experimenting with hyperparameters
-- Building intuition about image processing
+### 1. Start With The Basics
 
-👉 **Location:** `2_Practical Exercise/`
-- `251024_Final_VisualizingComputerVisionPipeline.ipynb` — The main interactive notebook
+We begin with the slides in `1_Presentation/`. This is where we introduce the central question: how do humans see, how do machines see, and how can a neural network learn meaningful patterns from images?
 
----
+<p align="center">
+  <img src="docs/media/cnn-explanation.jpg" alt="Explaining convolutional neural networks during the workshop" width="100%">
+</p>
 
-### 3️⃣ **Game** — *Master CV Through Challenge*
-A **treasure hunt game** that brings it all together! 
+### 2. Revisit The Same Steps Live
 
-Players navigate through 7 progressive levels, each with unique challenges:
-- **Level 1-3:** Object detection challenges (find specific items in real-time)
-- **Level 4-7:** Pose estimation challenges (mimic poses, perform rituals)
+Next, we open `2_Practical Exercise/251024_Final_VisualizingComputerVisionPipeline.ipynb`. Here, the same ideas return as webcam-based visualizations, filters, detections, tracking, and pose estimation. This is the bridge between theory and application.
 
-🎯 **Game Features:**
-- Multi-language support (English, Dutch, German, Spanish, French)
-- Progressive difficulty
-- Real-time CV processing
-- Engaging visuals and sound effects
-- Dynamic object detection with YOLO
-- Pose estimation with skeletal tracking
+### 3. Turn Understanding Into Play
 
-👉 **Location:** `3_Game/`
-- `251025_CVgame_treasure-hunt.ipynb` — Launch the game here
+Then we run `3_Game/251025_CVgame_treasure-hunt.ipynb`. The early levels use object detection. The later levels use pose estimation. Students stop being spectators and start using the technology actively.
 
----
+### 4. Finish On The Quiz
 
-## 🎯 Who Is This For?
+We return to the questions from the presentation and use the quiz to connect the playful part back to the vocabulary and ideas from the first half of the workshop.
 
-### 👨‍🏫 **For Teachers**
-Looking for a structured way to introduce Computer Vision to motivated students? Kinderuniversity provides:
-- ✅ Low setup complexity — just install Python packages
-- ✅ Progressive difficulty — start simple, get complex
-- ✅ Engaging content — move from theory to practice to game
-- ✅ Extensible framework — easily add new levels and challenges
+### 5. If There Is Time: Train A Small Model Live
 
-### 👨‍💻 **For Students**
-Ready for a hands-on challenge? You'll:
-- ✅ Learn CV fundamentals through interactive experiments
-- ✅ See real algorithms working on your own webcam feed
-- ✅ Build problem-solving skills through game-based learning
-- ✅ Customize the game with your own challenges and levels
+As an optional extension, we run `2_Practical Exercise/TrainNetwork_updated_v2.py`. This script trains a small custom single-object detector from scratch and visualizes what it is looking for while it learns. We begin with a small set of positive examples, then continue with live feedback: correct detections are reinforced with more target examples, while wrong guesses are corrected with background examples. In workshop terms, this becomes a concrete way to discuss training data, feedback, and why models only improve when the examples are meaningful.
 
----
+<p align="center">
+  <img src="docs/media/workshop-setup.png" alt="Workshop setup with projection screen, camera, and practical demonstration material" width="100%">
+</p>
 
-## ⚡ Quick Start
+## Before You Present
 
-### Prerequisites
-- **Python 3.8 or later**
-- **Webcam** (required for practical exercises and game)
-- **GPU recommended** (NVIDIA CUDA for faster processing) — CPU works but slower
+- The notebooks and the optional training script now start with a package check. If something is missing, they print a friendly install command and explain what to do next.
+- The first time you run the practical notebook or the game, Ultralytics may download model weights automatically. Before presenting, it is strongly recommended to run the material once in advance and step through every level so downloads, caching, and warm-up happen before the audience arrives.
+- The optional background-mask capture cell is placed after the main game cell. Most workshops do not need it. If you do want to hide part of the webcam view, capture the mask, paint the forbidden area red, and then run the game again.
 
-### 1. Clone the Repository
+## Installation
+
+Python 3.10 or newer is a good starting point on Windows. A webcam is required for the practical notebook and the game.
+
+Create and activate an environment:
+
 ```bash
-git clone https://github.com/yourusername/Kinderuniversity.git
-cd Kinderuniversity
+python -m venv .venv
+.venv\Scripts\activate
+python -m pip install --upgrade pip
 ```
 
-### 2. Install Dependencies
+Install the main packages:
+
 ```bash
-pip install -r requirements.txt
+python -m pip install notebook numpy opencv-python pygame torch ultralytics
 ```
 
-**Key packages:**
-- `jupyter` — Interactive notebooks
-- `opencv-python` — Computer vision library
-- `numpy`, `torch` — Numerical computing
-- `ultralytics` — YOLO object detection
-- `pygame` — Game engine
+Notes:
 
-### 3. Download Pre-trained Models
-The game and exercises use pre-trained YOLO models. They'll auto-download on first run, or manually download:
-- `yolo11x-pose.pt` → `3_Game/yolo-Weights/`
-- `yolov8x-worldv2.pt` → `3_Game/yolo-Weights/`
+- `tkinter` is used by the practical notebook and is included with most standard Windows Python installations.
+- If you want GPU acceleration, install the matching PyTorch build for your system before running the workshop.
+- The runtime checks inside the notebooks and script will tell you what is missing if your environment is incomplete.
 
-### 4. Start Learning!
+## Running The Workshop Materials
 
-**Option A: Step through fundamentals**
+### Presentation
+
+Open one of the slide decks in `1_Presentation/`.
+
+- `Kinderuniversiteit Presentation - EN.pptx`
+- `Kinderuniversiteit Presentation - NL.pptx`
+
+### Practical Exercise
+
 ```bash
-cd 1_Presentation
-# Open the presentation slides (pptx files)
-```
-
-**Option B: Interactive visualization**
-```bash
-cd 2_Practical\ Exercise
+cd "2_Practical Exercise"
 jupyter notebook 251024_Final_VisualizingComputerVisionPipeline.ipynb
 ```
 
-**Option C: Play the game**
+### Game
+
 ```bash
-cd 3_Game
+cd "3_Game"
 jupyter notebook 251025_CVgame_treasure-hunt.ipynb
-# Run the first cell and enjoy!
 ```
 
----
+### Optional Live Training Demo
 
-## 🎮 The Treasure Hunt Game — In Action
-
-The game is the centerpiece of this project. Players navigate through themed levels using **real-time computer vision**:
-
-- **Object Detection Levels:** Find hidden treasures by detecting specific objects in your environment
-- **Pose Estimation Levels:** Strike poses or perform ritual gestures to unlock challenges
-
-**Supported Languages:**
-- 🇬🇧 English
-- 🇳🇱 Dutch
-- 🇩🇪 German
-- 🇪🇸 Spanish
-- 🇫🇷 French
-
-**Features:**
-- Multi-level progression
-- Dynamic leaderboard (track scores locally)
-- Sound effects and speech bubbles
-- Customizable player avatars
-- Map-based navigation between levels
-
----
-
-## 📁 Project Structure
-
-```
-Kinderuniversity/
-├── 1_Presentation/               # Theory & concepts
-│   ├── Kinderuniversiteit Presentation - EN.pptx
-│   ├── Kinderuniversiteit Presentation - NL.pptx
-│   └── Kinderuniversiteit Presentation - NL.pdf
-│
-├── 2_Practical Exercise/         # Hands-on learning
-│   ├── 251024_Final_VisualizingComputerVisionPipeline.ipynb
-│   └── templates/
-│
-├── 3_Game/                       # Treasure hunt game
-│   ├── 251025_CVgame_treasure-hunt.ipynb  (Start here!)
-│   ├── CV_navigation.py
-│   ├── CV_pose_estimation.py
-│   ├── game_runtime_utils.py
-│   ├── maps/                     # Game levels
-│   ├── players/                  # Character assets
-│   ├── sounds/                   # Audio effects
-│   ├── yolo-Weights/             # Pre-trained models
-│   └── dialogs_*.json            # Multi-language support
-│
-└── players/                      # Player character resources
+```bash
+cd "2_Practical Exercise"
+python TrainNetwork_updated_v2.py
 ```
 
----
+## Practical Exercise: Short Guide For Teachers
 
-## 🛠️ How the Game Works (Technical Overview)
+This notebook works best as a guided comparison: the same short recording is replayed through increasingly more powerful ways of "seeing". The explanations below are intentionally simplified for adult readers without a computer-vision background.
 
-### Detection Pipeline
-1. **Webcam Input** → Raw video frames
-2. **YOLO Processing** → Object/pose detection
-3. **Game Logic** → Check if detection matches challenge
-4. **Feedback** → Visual and audio feedback to player
+1. **RGB numbers vs pixels**  
+   The image is simplified into larger blocks, and each block shows an average RGB value. This helps explain that a digital image is built from color values rather than objects.  
+   Ask: See how the first value is highest in red regions? Which values do you notice in dark areas? Which values become high in very bright white regions?
 
-### Two Challenge Types
+2. **Convolution sweep**  
+   A small window moves across the image and updates the center region using information from nearby pixels. The main idea is that computers often look at small neighborhoods, not one pixel in isolation.  
+   Ask: Why might the center pixel be easier to interpret if we also look at its neighbors?
 
-**Object Detection (Levels 1-3):**
-- Find: Hat, Scissors, Lighter, Spoon, Necklace, Frisbee, Branch, Book
-- Algorithm: YOLO v8 World (zero-shot detection)
+3. **Edges**  
+   This keeps mainly the places where brightness changes strongly, such as outlines or boundaries. Flat regions often disappear while structure remains.  
+   Ask: Which parts vanish completely, and which edges stay visible?
 
-**Pose Estimation (Levels 4-7):**
-- Strike specific poses to unlock challenges
-- Algorithm: YOLO11 Pose (skeleton keypoint detection)
-- Example: Touch your toes, raise your arms, perform a ritual
+4. **Color quantization**  
+   The image is reduced to a smaller set of representative colors. Fine shading is lost, but the main shapes are still recognizable.  
+   Ask: What detail is lost here, and what is still surprisingly easy to identify?
 
----
+5. **Edges plus quantization**  
+   This combines simplified colors with strong boundaries. It is a useful step for showing how several processing ideas can be layered.  
+   Ask: Does the image become easier to read with both simplification and edges together?
 
-## 🎨 Customization & Extension
+6. **Template matching**  
+   The notebook slides a small example image over the full frame and looks for places that resemble it. This is simple and intuitive, but much less flexible than modern learned detectors.  
+   Ask: What would happen if the object changes size, angle, or is partly hidden?
 
-### Add New Levels
-New game levels can be added by:
-1. Creating a new folder in `3_Game/maps/level_N/`
-2. Defining game rules in the main game notebook
-3. Adding objects to detect or poses to match
+7. **YOLO-World detection**  
+   Now the notebook uses a pretrained detector that can place boxes around objects and assign labels. This is a good moment to contrast hand-made matching with learned recognition.  
+   Ask: Which detections look reliable, and which ones seem surprising or wrong?
 
-### Add New Objects to Detect
-Edit the object list in `CV_navigation.py`:
-```python
-self.class_universe = [
-    'hat', 'scissors', 'lighter', 
-    'your_new_object_here'  # → Add here!
-]
-```
+8. **Person tracking**  
+   The system tries to keep the same identity for a detected person over time. This adds the idea of continuity, not just single-frame detection.  
+   Ask: What gets harder when people cross each other or move quickly?
 
-### Translate to New Languages
-Add a new JSON file: `dialogs_YOUR_LANGUAGE.json` with translations
+9. **Pose estimation**  
+   The model predicts body keypoints such as shoulders, elbows, wrists, hips, knees, and ankles. This shows that a model can estimate structure, not just draw a box.  
+   Ask: Which joints are easiest to detect, and which ones disappear when they are hidden?
 
----
+10. **Left vs right people**  
+    Detection results are turned into a simple rule: how many people are on the left side of the screen and how many are on the right? This is a nice example of a model feeding a simple decision.  
+    Ask: What should happen if a person stands almost exactly in the middle?
 
-## 🔧 Troubleshooting
+11. **Live YOLO-World with `classes.txt`**  
+    The final step returns to a live camera feed and uses `templates/classes.txt` to decide which objects the model should look for. This helps teachers move from "using AI" to "choosing what the system should do".  
+    Ask: Which class names work well, and which ones are too vague or ambiguous?
 
-### Webcam Not Working?
-- Check permissions: Is the camera allowed in your OS settings?
-- Try: `python -c "import cv2; print(cv2.getBuildInformation())"`
+## What Is In This Repository
 
-### Slow Performance?
-- Enable GPU: `torch.cuda.is_available()` should return `True`
-- Reduce video resolution in game settings
-- Close other applications
+- `1_Presentation/` contains the English and Dutch slide decks.
+- `2_Practical Exercise/` contains the practical notebook, template images, and the optional live training script.
+- `3_Game/` contains the treasure-hunt notebook, supporting Python files, maps, sounds, dialogue, and player assets.
+- `docs/media/` contains the workshop photos, the workflow collage, and the short demo video used in this README.
 
-### Models Not Downloading?
-- Check internet connection
-- Manually download from [Ultralytics releases](https://github.com/ultralytics/ultralytics)
-- Place `.pt` files in `3_Game/yolo-Weights/`
+## Good Follow-Up Tasks For Students
 
-### Import Errors?
-- Ensure all packages installed: `pip install -r requirements.txt`
-- Restart your Jupyter kernel
-- Update packages: `pip install --upgrade -r requirements.txt`
+- Add a new object-detection level in `3_Game/CV_navigation.py`.
+- Add a new pose-based level in `3_Game/CV_pose_estimation.py` and the game notebook.
+- Change the object classes in `2_Practical Exercise/templates/classes.txt`.
+- Translate or adapt the story in `3_Game/dialogs_*.json`.
+- Create new maps, props, or interactions in `3_Game/maps/`.
 
----
+## Privacy And Generated Files
 
-## 🎓 Learning Outcomes
+The repository ignores locally generated webcam artifacts and leaderboard data such as:
 
-By completing this project, learners will:
+- `3_Game/privacy_mask_template.png`
+- `3_Game/Leaderboard/leaderboard.json`
+- `3_Game/Leaderboard/ritual_success_*.png`
 
-✅ **Understand how machines see** — Image sensors, pixels, color spaces
-✅ **Grasp deep learning basics** — Neural networks, feature extraction, inference
-✅ **Apply CV in practice** — Real-time object detection and pose estimation
-✅ **Problem-solve creatively** — Design challenges within the game framework
-✅ **Think algorithmically** — Understand trade-offs (speed vs. accuracy)
-
----
-
-## 🤝 Contributing
-
-Have ideas for new challenges, levels, or features? We'd love your contributions!
-
-### Ways to Help:
-1. **Add new game levels** with unique CV challenges
-2. **Translate to more languages**
-3. **Improve games assets** (characters, sounds, visuals)
-4. **Bug fixes and optimizations**
-5. **Documentation improvements**
-
-Please submit:
-- Issues for bugs or suggestions
-- Pull requests for improvements
-- Feature requests for new CV challenges
-
----
-
-## 📋 Requirements
-
-- **Python:** 3.8 or later
-- **RAM:** 4GB minimum (8GB+ recommended)
-- **GPU:** Optional but recommended (NVIDIA CUDA)
-- **Webcam:** Required for exercises and game
-- **Display:** 1920x1080 or higher recommended
-
-### Python Packages:
-See `requirements.txt` for full dependency list. Key packages:
-- torch / torchvision
-- opencv-python
-- ultralytics (YOLO)
-- jupyter / jupyterlab
-- pygame
-- numpy
-
----
-
-## 📜 License
-
-This project is provided for educational purposes. See LICENSE file for details.
-
----
-
-## 👥 Credits & Acknowledgments
-
-Created for **Kinderuniversity** — an initiative to bring Computer Vision education to the next generation.
-
-Special thanks to:
-- [Ultralytics](https://www.ultralytics.com/) for YOLO models
-- [OpenCV](https://opencv.org/) for computer vision tools
-- [Pygame](https://www.pygame.org/) for the game engine
-- All educators and students who inspired this project
-
----
-
-## 📞 Support
-
-Getting stuck? Have questions?
-
-- 📧 **Open an issue** on GitHub
-- 💬 **Start a discussion** for general questions
-- 📚 **Check the wikis** for detailed guides
-
----
-
-## 🌟 Next Steps
-
-1. **Try the interactive notebook** → `2_Practical Exercise/`
-2. **Explore the code** → Understand how detection works
-3. **Play the game** → `3_Game/251025_CVgame_treasure-hunt.ipynb`
-4. **Design your own challenge** → Add a new level!
-5. **Share your success** → Show us what you built!
-
----
-
-**Happy learning! 🚀 Let's teach the world to see through machine learning.** 🤖👀
-
----
-
-*Kinderuniversity makes Computer Vision accessible, engaging, and fun.*
+That keeps personal workshop data out of a normal Git workflow while still allowing the game to generate these files locally when needed.

@@ -73,6 +73,9 @@
     },
     "dialog_4": {
     "es": "¡Mira,\n la combinación ha abierto \n un pasaje secreto!"
+    },
+    "dialog_5": {
+    "es": "Mago:\nPara entrar en mi\ntemplo, teneis que\nresolver el puzzle!\nPodeis recordar\nlas 3 combinaciones?"
     }
 
   },
