@@ -1,7 +1,7 @@
 # Kinderuniversity
 ## How Do Machines See and Learn?
 
-Built through repeated Kinderuniversiteit workshops in Belgium, this repository turns computer vision into something learners can see, test, discuss, and extend for themselves. The material was shaped in real sessions rather than only on paper: teachers get a clear structure, students get live feedback, and the workshop stays faithful to both scientific accuracy and hands-on curiosity.
+Built through repeated Kinderuniversiteit workshops in Belgium, this repository turns computer vision into something learners can see, test, discuss, and extend for themselves. The material aims to build understanding in Neural Networks and Computer Vision and support teachers get a clear structure, students with a fun starting point for coding.
 
 For teachers, this is an easy starting point for introducing computer vision with slides, live webcam experiments, a game, and a closing quiz. For students, it is also a project base: they can add new detection targets, new levels, new maps, new dialogue, or even new training ideas of their own.
 
