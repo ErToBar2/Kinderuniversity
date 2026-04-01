@@ -188,12 +188,7 @@ This notebook works best as a guided comparison: the same short recording is rep
 - Translate or adapt the story in `3_Game/dialogs_*.json`.
 - Create new maps, props, or interactions in `3_Game/maps/`.
 
-## Privacy And Generated Files
 
-The repository ignores locally generated webcam artifacts and leaderboard data such as:
-
-- `3_Game/privacy_mask_template.png`
-- `3_Game/Leaderboard/leaderboard.json`
 - `3_Game/Leaderboard/ritual_success_*.png`
 
 That keeps personal workshop data out of a normal Git workflow while still allowing the game to generate these files locally when needed.
